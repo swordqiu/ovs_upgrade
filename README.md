@@ -15,9 +15,15 @@ Usage
 
     Uitility script to restart the services and kernel module
 
+* download.sh
+
+    Utility to download ovs source codes
+
 
 Example
 -------
+
+    sh download.sh
 
     ./ovs_install.sh 1.10.0
 
