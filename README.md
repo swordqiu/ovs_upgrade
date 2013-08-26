@@ -6,18 +6,19 @@ Tools upgrade openvswitch without service interruption
 Usage
 -----
 
-./ovs_install.sh <version>
+* ovs_install.sh
 
-Install both kernel and userspace software
+    Install both kernel and userspace software
 
 
-sudo ./ovs_control force-reload-kmod
+* ovs_control
 
-Restart the services
+    Uitility script to restart the services and kernel module
+
 
 Example
 -------
 
-./ovs_install.sh 1.10.0
+    ./ovs_install.sh 1.10.0
 
-sudo ./ovs_control force-reload-kmod
+    sudo ./ovs_control force-reload-kmod
