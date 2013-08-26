@@ -4,7 +4,7 @@
 VERSION=$1
 
 if test -z $VERSION; then
-    echo "Usage: ovs_install.sh <version> [install]"
+    echo "Usage: ovs_install.sh <version>"
     exit 1
 fi
 
