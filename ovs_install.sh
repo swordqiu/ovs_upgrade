@@ -25,7 +25,18 @@ if test -f /etc/redhat-release; then
     fi
 fi
 MODULE_DIR=/lib/modules/`uname -r`
-./configure --with-linux=$MODULE_DIR/build --enable-ndebug
+if test ! -f ./configure; then
+    ./boot.sh
+    if test "$?" -ne "0"; then
+        echo "./boot.sh failed"
+        exit 1
+    fi
+fi
+./configure --with-linux=$MODULE_DIR/build --enable-ndebug --prefix=/usr/local
+if test "$?" -ne "0"; then
+    echo "./configure failed"
+    exit 1
+fi
 make
 if test "$?" -ne "0"; then
     echo "Compile failed"
@@ -42,11 +53,15 @@ if test ! -f $KMOD_PATH; then
 fi
 MODULE_DEST=$MODULE_DIR/kernel/net/openvswitch
 sudo mkdir -p $MODULE_DEST
+sudo rm -fr $MODULE_DEST/*
 sudo cp $KMOD_PATH $MODULE_DEST
 sudo depmod -a
 
-OVS_CONF_PATH=/usr/local/etc/openvswitch
-if test ! -f $OVS_CONF_PATH/conf.db; then
-    sudo mkdir -p $OVS_CONF_PATH
-    sudo /usr/local/bin/ovsdb-tool create /usr/local/etc/openvswitch/conf.db vswitchd/vswitch.ovsschema
+if test ! -f /usr/local/etc/openvswitch/conf.db; then
+    sudo mkdir -p /usr/local/etc/openvswitch
+    if test -f /etc/openvswitch/conf.db; then
+        sudo cp /etc/openvswitch/* /usr/local/etc/openvswitch
+    else
+        sudo /usr/local/bin/ovsdb-tool create /usr/local/etc/openvswitch/conf.db vswitchd/vswitch.ovsschema
+    fi
 fi
